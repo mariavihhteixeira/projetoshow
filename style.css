@@ -1,0 +1,131 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    background:#111;
+    color:white;
+
+}
+
+header{
+
+    background:#8b0000;
+    text-align:center;
+    padding:40px;
+
+}
+
+header h1{
+
+    font-size:55px;
+
+}
+
+header h2{
+
+    color:#ddd;
+
+}
+
+.contador{
+
+    text-align:center;
+    padding:40px;
+
+}
+
+.timer{
+
+    margin-top:20px;
+    font-size:45px;
+    font-weight:bold;
+    color:#ff2b2b;
+
+}
+
+.vendas{
+
+    width:500px;
+    margin:auto;
+
+    background:#222;
+
+    padding:30px;
+
+    border-radius:10px;
+
+}
+
+.vendas h2{
+
+    text-align:center;
+    margin-bottom:20px;
+
+}
+
+form{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+label{
+
+    margin-top:15px;
+
+}
+
+select,
+input{
+
+    padding:12px;
+    margin-top:5px;
+
+}
+
+button{
+
+    margin-top:25px;
+
+    padding:15px;
+
+    border:none;
+
+    background:red;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#b30000;
+
+}
+
+#resultado{
+
+    margin-top:30px;
+    color:#00ff66;
+    text-align:center;
+
+}
+
+#estoque{
+
+    color:red;
+    font-weight:bold;
+
+}
