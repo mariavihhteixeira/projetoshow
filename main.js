@@ -1,96 +1,137 @@
-// Datas
+// ==========================
+// DATAS DOS EVENTOS
+// ==========================
 
-const abertura = new Date("August 03, 2026 00:00:00").getTime();
+// Abertura das vendas
+const abertura = new Date(2026, 7, 3, 0, 0, 0).getTime();
+// Agosto = 7
 
-const show = new Date("October 28, 2026 20:00:00").getTime();
+// Dia do show
+const show = new Date(2026, 9, 28, 20, 0, 0).getTime();
+// Outubro = 9
+
+// ==========================
+// ESTOQUE
+// ==========================
 
 let estoque = 50000;
 
-//===============================
+document.getElementById("estoque").innerHTML = estoque;
 
-function atualizarContador(data, elemento){
+// ==========================
+// FUNÇÃO DO CRONÔMETRO
+// ==========================
+
+function atualizarContador(dataFinal, idElemento) {
 
     const agora = new Date().getTime();
 
-    let distancia = data - agora;
+    const diferenca = dataFinal - agora;
 
-    if(distancia < 0){
+    if (diferenca <= 0) {
 
-        document.getElementById(elemento).innerHTML="EVENTO INICIADO";
+        document.getElementById(idElemento).innerHTML =
+            "00d 00h 00m 00s";
 
         return;
 
     }
 
-    let dias=Math.floor(distancia/(1000*60*60*24));
+    const dias = Math.floor(
+        diferenca / (1000 * 60 * 60 * 24)
+    );
 
-    let horas=Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
+    const horas = Math.floor(
+        (diferenca % (1000 * 60 * 60 * 24))
+        / (1000 * 60 * 60)
+    );
 
-    let minutos=Math.floor((distancia%(1000*60*60))/(1000*60));
+    const minutos = Math.floor(
+        (diferenca % (1000 * 60 * 60))
+        / (1000 * 60)
+    );
 
-    let segundos=Math.floor((distancia%(1000*60))/1000);
+    const segundos = Math.floor(
+        (diferenca % (1000 * 60))
+        / 1000
+    );
 
-    document.getElementById(elemento).innerHTML=
-
-    dias+"d "
-    +horas+"h "
-    +minutos+"m "
-    +segundos+"s";
+    document.getElementById(idElemento).innerHTML =
+        dias + "d " +
+        horas + "h " +
+        minutos + "m " +
+        segundos + "s";
 
 }
 
-setInterval(()=>{
+// Atualiza imediatamente
+atualizarContador(abertura, "contadorVenda");
+atualizarContador(show, "contadorShow");
 
-    atualizarContador(abertura,"contadorVenda");
+// Atualiza a cada segundo
+setInterval(function () {
 
-    atualizarContador(show,"contadorShow");
+    atualizarContador(abertura, "contadorVenda");
+    atualizarContador(show, "contadorShow");
 
-},1000);
+}, 1000);
 
-//==================================
+// ==========================
+// COMPRA DOS INGRESSOS
+// ==========================
 
-const form=document.getElementById("formIngresso");
+const formulario = document.getElementById("formIngresso");
 
-form.addEventListener("submit",(e)=>{
+formulario.addEventListener("submit", function (e) {
 
     e.preventDefault();
 
-    let qtd=parseInt(document.getElementById("quantidade").value);
+    const setor =
+        document.getElementById("setor").value;
 
-    let valor=parseFloat(document.getElementById("tipo").value);
+    const quantidade =
+        parseInt(document.getElementById("quantidade").value);
 
-    let setor=document.getElementById("setor").value;
+    const preco =
+        parseFloat(document.getElementById("tipo").value);
 
-    if(estoque==0){
+    if (quantidade <= 0) {
 
-        alert("Ingressos esgotados!");
-
-        return;
-
-    }
-
-    if(qtd>estoque){
-
-        alert("Não existem ingressos suficientes.");
+        alert("Informe uma quantidade válida.");
 
         return;
 
     }
 
-    estoque-=qtd;
+    if (quantidade > estoque) {
 
-    document.getElementById("estoque").innerHTML=estoque;
+        alert("Quantidade indisponível.");
 
-    let total=qtd*valor;
+        return;
 
-    document.getElementById("resultado").innerHTML=
+    }
 
-    "Compra realizada!<br><br>" +
+    estoque -= quantidade;
 
-    "Setor: "+setor+"<br>" +
+    document.getElementById("estoque").innerHTML =
+        estoque;
 
-    "Quantidade: "+qtd+"<br>" +
+    const total = quantidade * preco;
 
-    "Total: R$ "+total.toFixed(2);
+    document.getElementById("resultado").innerHTML =
+
+        "<h2>Compra realizada com sucesso!</h2>" +
+
+        "<br><b>Setor:</b> " + setor +
+
+        "<br><b>Quantidade:</b> " + quantidade +
+
+        "<br><b>Valor Unitário:</b> R$ " +
+        preco.toFixed(2) +
+
+        "<br><b>Total:</b> R$ " +
+        total.toFixed(2);
+
+    formulario.reset();
 
 });
