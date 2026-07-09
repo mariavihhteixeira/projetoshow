@@ -1,131 +1,112 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
+// ==========================
+// DATAS DOS EVENTOS
+// ==========================
+// Nota: No JavaScript, os meses começam no 0 (Janeiro = 0, Agosto = 7, Outubro = 9)
+const abertura = new Date(2026, 7, 3, 0, 0, 0).getTime(); // 3 de Agosto de 2026
+const show = new Date(2026, 9, 28, 20, 0, 0).getTime();   // 28 de Outubro de 2026
 
-body{
+// ==========================
+// ESTOQUE
+// ==========================
+let estoque = 50000;
 
-    background:#111;
-    color:white;
+// O código abaixo aguarda o HTML carregar completamente antes de rodar as funções,
+// evitando que o script trave ou que o cronômetro fique zerado.
+window.addEventListener("DOMContentLoaded", () => {
 
-}
+    // Inicializa o estoque na tela
+    const elementoEstoque = document.getElementById("estoque");
+    if (elementoEstoque) {
+        elementoEstoque.innerHTML = estoque;
+    }
 
-header{
+    // ==========================
+    // FUNÇÃO DO CRONÔMETRO
+    // ==========================
+    function atualizarContador(dataFinal, idElemento) {
+        const agora = new Date().getTime();
+        const diferenca = dataFinal - agora;
+        const elemento = document.getElementById(idElemento);
 
-    background:#8b0000;
-    text-align:center;
-    padding:40px;
+        // Se o elemento não existir no HTML, evita erros no console
+        if (!elemento) return;
 
-}
+        // Se o tempo já acabou
+        if (diferenca <= 0) {
+            elemento.innerHTML = "00d 00h 00m 00s";
+            return;
+        }
 
-header h1{
+        // Seus cálculos matemáticos corretos
+        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
 
-    font-size:55px;
+        // Formatação visual: adiciona um "0" à esquerda para números menores que 10
+        const d = dias < 10 ? "0" + dias : dias;
+        const h = horas < 10 ? "0" + horas : horas;
+        const m = minutos < 10 ? "0" + minutos : minutos;
+        const s = segundos < 10 ? "0" + segundos : segundos;
 
-}
+        // Atualiza o texto na tela
+        elemento.innerHTML = d + "d " + h + "h " + m + "m " + s + "s";
+    }
 
-header h2{
+    // Atualiza imediatamente ao abrir a página (evita o delay de 1 segundo)
+    atualizarContador(abertura, "contadorVenda");
+    atualizarContador(show, "contadorShow");
 
-    color:#ddd;
+    // Atualiza os contadores a cada 1 segundo
+    setInterval(function () {
+        atualizarContador(abertura, "contadorVenda");
+        atualizarContador(show, "contadorShow");
+    }, 1000);
 
-}
+    // ==========================
+    // COMPRA DOS INGRESSOS
+    // ==========================
+    const formulario = document.getElementById("formIngresso");
 
-.contador{
+    if (formulario) {
+        formulario.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    text-align:center;
-    padding:40px;
+            const setor = document.getElementById("setor").value;
+            const quantidade = parseInt(document.getElementById("quantidade").value);
+            const preco = parseFloat(document.getElementById("tipo").value);
 
-}
+            // Validações
+            if (quantidade <= 0 || isNaN(quantidade)) {
+                alert("Informe uma quantidade válida.");
+                return;
+            }
 
-.timer{
+            if (quantidade > estoque) {
+                alert("Quantidade indisponível.");
+                return;
+            }
 
-    margin-top:20px;
-    font-size:45px;
-    font-weight:bold;
-    color:#ff2b2b;
+            // Atualiza a variável e a interface
+            estoque -= quantidade;
+            document.getElementById("estoque").innerHTML = estoque;
 
-}
+            const total = quantidade * preco;
 
-.vendas{
+            // Renderiza o resultado na tela
+            document.getElementById("resultado").innerHTML =
+                "<h2>Compra realizada com sucesso!</h2>" +
+                "<br><b>Setor:</b> " + setor +
+                "<br><b>Quantidade:</b> " + quantidade +
+                "<br><b>Valor Unitário:</b> R$ " + preco.toFixed(2) +
+                "<br><b>Total:</b> R$ " + total.toFixed(2);
 
-    width:500px;
-    margin:auto;
+            // Limpa os campos do formulário
+            formulario.reset();
+        });
+    }
+});
 
-    background:#222;
 
-    padding:30px;
 
-    border-radius:10px;
-
-}
-
-.vendas h2{
-
-    text-align:center;
-    margin-bottom:20px;
-
-}
-
-form{
-
-    display:flex;
-    flex-direction:column;
-
-}
-
-label{
-
-    margin-top:15px;
-
-}
-
-select,
-input{
-
-    padding:12px;
-    margin-top:5px;
-
-}
-
-button{
-
-    margin-top:25px;
-
-    padding:15px;
-
-    border:none;
-
-    background:red;
-
-    color:white;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-button:hover{
-
-    background:#b30000;
-
-}
-
-#resultado{
-
-    margin-top:30px;
-    color:#00ff66;
-    text-align:center;
-
-}
-
-#estoque{
-
-    color:red;
-    font-weight:bold;
-
-}
+    
