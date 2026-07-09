@@ -2,8 +2,8 @@
 // DATAS DOS EVENTOS
 // ==========================
 // Nota: No JavaScript, os meses começam no 0 (Janeiro = 0, Agosto = 7, Outubro = 9)
-const abertura = new Date(2027, 7, 3, 0, 0, 0).getTime(); // 3 de Agosto de 2026
-const show = new Date(2027, 9, 28, 20, 0, 0).getTime();   // 28 de Outubro de 2026
+const abertura = new Date(2026, 7, 3, 0, 0, 0).getTime(); // 3 de Agosto de 2026
+const show = new Date(2026, 9, 28, 20, 0, 0).getTime();   // 28 de Outubro de 2026
 
 // ==========================
 // ESTOQUE
